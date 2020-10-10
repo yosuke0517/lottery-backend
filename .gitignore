@@ -1,0 +1,10 @@
+/.idea
+
+# env
+.env
+
+# local dbdata
+/dbdata
+
+# migration file
+/api/migrations
