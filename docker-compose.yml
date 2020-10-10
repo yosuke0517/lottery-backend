@@ -1,0 +1,48 @@
+version: '3'
+services:
+  db:
+    container_name: lotterydb
+    build:
+      # dockerfileの名前だけ指定する
+      dockerfile: Dockerfile
+      # contextで場所を指定する
+      context: ./postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    volumes:
+        - dbvolume:/var/lib/postgresql/data
+#  selenium-hub:
+#    image: selenium/hub
+#    container_name: selenium-hub
+#    ports:
+#      - "4444:4444"
+#
+#  chrome:
+#    image: selenium/node-chrome-debug
+#    depends_on:
+#      - selenium-hub
+#    environment:
+#      - HUB_PORT_4444_TCP_ADDR=selenium-hub
+#      - HUB_PORT_4444_TCP_PORT=4444
+  web:
+    container_name: lottery
+    build: .
+    command: ["./wait-for-it.sh", "db:5432", "--", "python", "manage.py", "runserver", "0.0.0.0:8888"]
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app
+    tty: true
+    stdin_open: true
+    depends_on:
+      - db
+volumes:
+  dbvolume:

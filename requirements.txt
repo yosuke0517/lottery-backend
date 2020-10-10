@@ -1,0 +1,17 @@
+asgiref==3.2.3
+Django==3.0.5
+djangorestframework==3.11.0
+mysqlclient==1.4.6
+pytz==2019.3
+sqlparse==0.3.0
+django-redis==4.11.0
+django-crispy-forms==1.9.0
+django-filter==2.2.0
+pyyaml==5.3.1
+uritemplate==3.0.1
+drf-yasg==1.17.1
+djangorestframework_simplejwt==4.4.0
+djoser==2.0.3
+django-extensions==2.2.9
+django-cors-headers==3.3.0
+flake8==3.8.3
