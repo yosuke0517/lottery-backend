@@ -10,4 +10,4 @@ RUN pip install --upgrade pip \
     selenium \
     beautifulsoup4 \
     sqlalchemy
-ADD . /app/
+ADD . /app/a
