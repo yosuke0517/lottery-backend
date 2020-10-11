@@ -8,7 +8,8 @@ from .models import (
     Message,
     MiniLoto,
     LotoSix,
-    LotoSeven
+    LotoSeven,
+    Trial
 )
 
 
@@ -51,3 +52,4 @@ admin.site.register(Message)
 admin.site.register(MiniLoto)
 admin.site.register(LotoSeven)
 admin.site.register(LotoSix)
+admin.site.register(Trial)

@@ -85,6 +85,22 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
+class Trial(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # 認証用ユーザと紐付け
+    user = models.OneToOneField(User, related_name='trialUser', on_delete=models.CASCADE)
+    is_tried = models.BooleanField(default=False)
+    # ユーザ作成と同時にトライアル開始とする
+    is_trying = models.BooleanField(default=True)
+    # ユーザ作成と同時にトライアル開始とする
+    start_at = models.DateTimeField(auto_now_add=True)
+    end_at = models.DateTimeField(auto_now_add=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.id
+
 class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # 認証用ユーザと紐付け
