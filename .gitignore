@@ -8,3 +8,10 @@
 
 # migration file
 /api/migrations
+
+/lottery_api/migrations
+
+/lottery_backend/migrations
+
+# img
+/_media

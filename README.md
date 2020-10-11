@@ -10,6 +10,9 @@
 - pay.jpに一任する
 - [参考](https://qiita.com/k4ssyi/items/5df5ea12cdffc9597198)
 
+# 未使用のボリュームを削除
+$ docker volume prune
+
 ### migrationファイル削除
 - `find . -path "*/migrations/*.py" -not -name "__init__.py" -delete`
 
