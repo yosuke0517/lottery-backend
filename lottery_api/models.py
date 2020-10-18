@@ -101,6 +101,7 @@ class Trial(models.Model):
     def __str__(self):
         return self.user.id
 
+
 class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # 認証用ユーザと紐付け
@@ -142,21 +143,22 @@ class Message(models.Model):
 
 
 class MiniLoto(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(primary_key=True, editable=False, max_length=20)
     lottery_date = models.DateTimeField(auto_now_add=True)
-    times = models.CharField(max_length=20)
+    times = models.IntegerField()
     number_1 = models.CharField(max_length=20)
     number_2 = models.CharField(max_length=20)
     number_3 = models.CharField(max_length=20)
     number_4 = models.CharField(max_length=20)
     number_5 = models.CharField(max_length=20)
     bonus_number1 = models.CharField(max_length=20)
+    lottery_number = models.CharField(max_length=50)
 
 
 class LotoSix(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(primary_key=True, editable=False, max_length=20)
     lottery_date = models.DateTimeField(auto_now_add=True)
-    times = models.CharField(max_length=20)
+    times = models.IntegerField()
     number_1 = models.CharField(max_length=20)
     number_2 = models.CharField(max_length=20)
     number_3 = models.CharField(max_length=20)
@@ -164,12 +166,13 @@ class LotoSix(models.Model):
     number_5 = models.CharField(max_length=20)
     number_6 = models.CharField(max_length=20)
     bonus_number1 = models.CharField(max_length=20)
+    lottery_number = models.CharField(max_length=50)
 
 
 class LotoSeven(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(primary_key=True, editable=False, max_length=20)
     lottery_date = models.DateTimeField(auto_now_add=True)
-    times = models.CharField(max_length=20)
+    times = models.IntegerField()
     number_1 = models.CharField(max_length=20)
     number_2 = models.CharField(max_length=20)
     number_3 = models.CharField(max_length=20)
@@ -179,3 +182,4 @@ class LotoSeven(models.Model):
     number_7 = models.CharField(max_length=20)
     bonus_number1 = models.CharField(max_length=20)
     bonus_number2 = models.CharField(max_length=20)
+    lottery_number = models.CharField(max_length=50)

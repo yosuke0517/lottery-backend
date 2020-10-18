@@ -1,10 +1,11 @@
-from rest_framework import authentication, permissions, generics
+from rest_framework import authentication, permissions, generics, filters
 from lottery_api import serializers, custompermissions
-from lottery_api.models import Message, Profile, MiniLoto
+from lottery_api.models import Message, Profile, MiniLoto, LotoSix, LotoSeven
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
+from lottery_api.filters import LotoSevenFilter
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -86,3 +87,26 @@ class MiniLotoListView(generics.ListAPIView):
 
     def get_queryset(self):
         return self.queryset
+
+
+# 汎用APIView ListAPIView （リストを取得するだけの用途）他にもCreateAPIViewとかがある
+class LotoSixListView(generics.ListAPIView):
+    queryset = LotoSix.objects
+    serializer_class = serializers.LotoSixSerializer
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        return self.queryset
+
+
+# 汎用APIView ListAPIView （リストを取得するだけの用途）他にもCreateAPIViewとかがある
+class LotoSevenListView(generics.ListAPIView):
+    queryset = LotoSeven.objects.all()
+    serializer_class = serializers.LotoSevenSerializer
+    filter_class = LotoSevenFilter
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        return self.queryset.order_by('times').reverse()

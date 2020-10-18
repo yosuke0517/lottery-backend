@@ -14,6 +14,8 @@ router.register('inbox', views.InboxListView, basename='inbox')  # 自分が送�
 # 汎用のAPIView（generics.〜）で作ったものはurlpatternsに書いていく
 urlpatterns = [
     path('miniloto/', views.MiniLotoListView.as_view(), name='miniloto'),
+    path('lotosix/', views.LotoSixListView.as_view(), name='lotosix'),
+    path('lotoseven/', views.LotoSevenListView.as_view(), name='lotoseven'),
     path('create/', views.CreateUserView.as_view(), name='create'),
     path('myprofile/', views.MyProfileListView.as_view(), name='myprofile'),
     path('', include(router.urls))

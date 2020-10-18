@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from lottery_api.models import Profile, Message, MiniLoto
+from lottery_api.models import Profile, Message, MiniLoto, LotoSix, LotoSeven
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -48,4 +48,18 @@ class MiniLotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = MiniLoto
         fields = ('lottery_date', 'times', 'number_1', 'number_2', 'number_3', 'number_4'
-                  , 'number_5', 'bonus_number1')
+                  , 'number_5', 'bonus_number1', 'lottery_number')
+
+
+class LotoSixSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LotoSix
+        fields = ('lottery_date', 'times', 'number_1', 'number_2', 'number_3', 'number_4'
+                  , 'number_5', 'number_6', 'bonus_number1', 'lottery_number')
+
+
+class LotoSevenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LotoSeven
+        fields = ('lottery_date', 'times', 'number_1', 'number_2', 'number_3', 'number_4'
+                  , 'number_5', 'number_6', 'number_7', 'bonus_number1', 'bonus_number2', 'lottery_number')
