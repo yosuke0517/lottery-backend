@@ -5,7 +5,7 @@ from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from lottery_api.filters import LotoSevenFilter
+from lottery_api.filters import LotoSevenFilter, LotoSixFilter, MiniLotoFilter
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -82,6 +82,7 @@ class MyProfileListView(generics.ListAPIView):
 class MiniLotoListView(generics.ListAPIView):
     queryset = MiniLoto.objects
     serializer_class = serializers.MiniLotoSerializer
+    filter_class = MiniLotoFilter
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -93,6 +94,7 @@ class MiniLotoListView(generics.ListAPIView):
 class LotoSixListView(generics.ListAPIView):
     queryset = LotoSix.objects
     serializer_class = serializers.LotoSixSerializer
+    filter_class = LotoSixFilter
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
