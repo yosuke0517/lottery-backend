@@ -80,5 +80,31 @@ eksctl create cluster \
   - git, PostgreSQLクライアントのインストール
     - `sudo yum install -y git`
     - `sudo amazon-linux-extras install -y postgresql10`
+    
+- エンドポイントの確認
+  - 出力タブの`RDSEndpoint`に記載
+  
+- データベース管理者（rootユーザ）パスワードの確認
+  - CloudFormationでデータベースを構築する際、RDSの管理者パスワードをSecrets Managerが作成しデータベースに登録している
+  - マネジメントコンソールのSecrets Managerの画面から確認する
+  - `RdsMasterSecret`という名前で作成しているのでリンクをクリックして表示
+  - `シークレットの値を取得する`ボタンを押下すると秘匿情報が表示される
 
-
+- アプリケーション用データベースユーザのパスワードの確認
+  - `RdsUserSecret`という名前で作成しているのでリンクを上記と同じように確認する
+  
+- postgresクライアントにてアプリケーション用データベースユーザの作成
+  - `createuser -d -U eksdbadmin -P -h eks-work-db.cllz5clgd9hh.ca-central-1.rds.amazonaws.com mywork`
+  - `createuser -d -U {ルートユーザ名} -P -h {RDSエンドポイント} {作成するユーザ名}`
+  - 最初の2回は`RdsUserSecret`のパスワード
+  - 最後の1回は`RdsMasterSecret`のパスワード
+  
+- データベースの作成
+  - `createdb -U mywork -h eks-work-db.cllz5clgd9hh.ca-central-1.rds.amazonaws.com -E UTF8 myworkdb`
+  - パスワード入力を促されるので`RdsUserSecret`のパスワードを入力する
+  
+- データベースへの接続とDDLの実行
+  - `psql -U mywork -h eks-work-db.cllz5clgd9hh.ca-central-1.rds.amazonaws.com myworkdb`
+  
+- マイグレーション
+  - TODO 1154~

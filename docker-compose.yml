@@ -19,22 +19,9 @@ services:
       - 5432
     volumes:
         - dbvolume:/var/lib/postgresql/data
-  selenium-hub:
-    image: selenium/hub
-    container_name: selenium-hub
-    ports:
-      - "4444:4444"
-
-  chrome:
-    image: selenium/node-chrome-debug
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_PORT_4444_TCP_ADDR=selenium-hub
-      - HUB_PORT_4444_TCP_PORT=4444
   web:
-    container_name: lottery
-    build: .
+    container_name: lottery_api
+    build: ./lottery_api
     command: ["./wait-for-it.sh", "db:5432", "--", "python", "manage.py", "runserver", "0.0.0.0:8888"]
     ports:
       - "8888:8888"

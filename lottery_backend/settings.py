@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'lottery_api.apps.LotteryApiConfig',
-    'lottery_batch.apps.LotteryBatchConfig',
 ]
 
 MIDDLEWARE = [
