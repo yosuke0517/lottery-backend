@@ -5,4 +5,4 @@ WORKDIR /app
 ADD requirements.txt /app/
 RUN pip install --upgrade pip \
     -r requirements.txt
-ADD . /app
+ADD . /app/
