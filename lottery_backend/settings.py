@@ -87,11 +87,11 @@ WSGI_APPLICATION = 'lottery_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lotterydb',
-        'USER': 'lottery',
-        'PASSWORD': 'lottery',
-        'HOST': 'db',
-        'PORT': 5432,
+        'NAME': os.environ['POSTGRES_PRODUCTION_DB'],
+        'USER': os.environ['POSTGRES_PRODUCTION_USER'],
+        'PASSWORD': os.environ['PRODUCTION_DB_APP_PASS'],
+        'HOST': os.environ['AWS_ACCESS_KEY_LOTTERY'],
+        'PORT': os.environ['DB_PORT']
     }
 }
 

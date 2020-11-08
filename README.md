@@ -34,11 +34,11 @@ $ docker volume prune
 - `01_base_resources_cfn.yaml`
 
 ### EKSクラスターの構築
-
+- `--name`のsuffixは自動的に`-cluster`が付与されるので明示的に-clusterを付与しない方が良い（-cluster-clusterってなる）
 ```
 eksctl create cluster \
  --vpc-public-subnets { CloudFormation 出力タブ WorkerSubnetsの値 } \
- --name eks-work-cluster \
+ --name eks-work \
  --region ca-central-1 \
  --version 1.14 \
  --nodegroup-name eks-work-nodegroup \
@@ -47,6 +47,8 @@ eksctl create cluster \
  --nodes-min 2 \
  --nodes-max 5
 ```
+
+- CloudFormation 出力タブ WorkerSubnetsの値: `subnet-06d27c1280ba6d31b,subnet-0a2518f0e69aa2721,subnet-0dbf69b9e83645ec1`
 
 ### 上記までの動作確認
 - `kubectl apply -f eks-env/02_nginx_k8s.yaml`
@@ -76,10 +78,11 @@ eksctl create cluster \
   - 踏み台サーバも作成される
   
 - セッションマネージャーによる踏み台サーバへの接続
-  - セッションマネージャーから`セッションを開始する`を選択
+  - System Manager→セッションマネージャーから`セッションを開始する`を選択
   - git, PostgreSQLクライアントのインストール
     - `sudo yum install -y git`
     - `sudo amazon-linux-extras install -y postgresql10`
+    - `cd`でホームディレクトリへ移動
     
 - エンドポイントの確認
   - 出力タブの`RDSEndpoint`に記載
@@ -93,18 +96,18 @@ eksctl create cluster \
 - アプリケーション用データベースユーザのパスワードの確認
   - `RdsUserSecret`という名前で作成しているのでリンクを上記と同じように確認する
   
-- postgresクライアントにてアプリケーション用データベースユーザの作成
-  - `createuser -d -U eksdbadmin -P -h eks-work-db.cllz5clgd9hh.ca-central-1.rds.amazonaws.com mywork`
+- postgresクライアントにてアプリケーション用データベースユーザの作成（セッションマネージャーにて作業）
+  - `createuser -d -U eksdbadmin -P -h {RDS EndPoint} mywork`
   - `createuser -d -U {ルートユーザ名} -P -h {RDSエンドポイント} {作成するユーザ名}`
   - 最初の2回は`RdsUserSecret`のパスワード
   - 最後の1回は`RdsMasterSecret`のパスワード
   
-- データベースの作成
-  - `createdb -U mywork -h eks-work-db.cllz5clgd9hh.ca-central-1.rds.amazonaws.com -E UTF8 myworkdb`
+- データベースの作成（セッションマネージャーにて作業）
+  - `createdb -U mywork -h {RDS EndPoint} -E UTF8 myworkdb`
   - パスワード入力を促されるので`RdsUserSecret`のパスワードを入力する
   
-- データベースへの接続とDDLの実行
-  - `psql -U mywork -h eks-work-db.cllz5clgd9hh.ca-central-1.rds.amazonaws.com myworkdb`
+- データベースへの接続とDDLの実行（セッションマネージャーにて作業）
+  - `psql -U mywork -h {RDS EndPoint} myworkdb`
   
 - マイグレーション
   - TODO 1154~
