@@ -87,11 +87,11 @@ WSGI_APPLICATION = 'lottery_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['POSTGRES_PRODUCTION_DB'],
-        'USER': os.environ['POSTGRES_PRODUCTION_USER'],
-        'PASSWORD': os.environ['PRODUCTION_DB_APP_PASS'],
-        'HOST': os.environ['AWS_ACCESS_KEY_LOTTERY'],
-        'PORT': os.environ['DB_PORT']
+        'NAME': 'lotterydb',
+        'USER': 'lottery',
+        'PASSWORD': 'lottery',
+        'HOST': 'db',
+        'PORT': 5432
     }
 }
 
@@ -134,8 +134,8 @@ AUTH_USER_MODEL = 'lottery_api.User'  # 今回認証に使うモデル
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
-
+STATIC_URL = '/_media/'
+STATIC_ROOT = os.path.join(BASE_DIR, '_media')
 MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
 MEDIA_URL = '/media/'
 

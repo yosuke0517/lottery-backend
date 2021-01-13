@@ -19,7 +19,7 @@ spec:
           image: ${ECR_HOST}/k8sbook/backend-app:1.0.0
           imagePullPolicy: Always
           ports:
-          - containerPort: 8080
+          - containerPort: 8000
           env:
             - name: DB_URL
               valueFrom:
@@ -38,13 +38,13 @@ spec:
                   name: db-config
           readinessProbe:
             httpGet:
-              port: 8080
+              port: 8000
               path: /health
             initialDelaySeconds: 15
             periodSeconds: 30
           livenessProbe:
             httpGet:
-              port: 8080
+              port: 8000
               path: /health
             initialDelaySeconds: 30
             periodSeconds: 30

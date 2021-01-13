@@ -29,11 +29,11 @@ $ docker volume prune
 - `psql -U lottery -d lotterydb -h localhost`
 - テーブル一覧：`\dt`
 
-# デプロイ
-### ベースリソースの構築
+# 💴デプロイ💴
+## ベースリソースの構築
 - `01_base_resources_cfn.yaml`
 
-### EKSクラスターの構築
+## EKSクラスターの構築
 - `--name`のsuffixは自動的に`-cluster`が付与されるので明示的に-clusterを付与しない方が良い（-cluster-clusterってなる）
 ```
 eksctl create cluster \
@@ -48,16 +48,14 @@ eksctl create cluster \
  --nodes-max 5
 ```
 
-- CloudFormation 出力タブ WorkerSubnetsの値: `subnet-06d27c1280ba6d31b,subnet-0a2518f0e69aa2721,subnet-0dbf69b9e83645ec1`
-
 ### 上記までの動作確認
 - `kubectl apply -f eks-env/02_nginx_k8s.yaml`
-- `kubectl port-forward nginx-pod 8080:80`
-- `http://localhost:8080`へアクセス
+- `kubectl port-forward nginx-pod 8000:80`
+- `http://localhost:8000`へアクセス
 - nginxの画面が表示されることを確認する
 - `kubectl delete pod nginx-pod`で片付け
 
-### データベースの構築
+## データベースの構築
 ##### おおまかな手順
 
 ```
@@ -109,5 +107,48 @@ eksctl create cluster \
 - データベースへの接続とDDLの実行（セッションマネージャーにて作業）
   - `psql -U mywork -h {RDS EndPoint} myworkdb`
   
-- マイグレーション
-  - TODO 1154~
+## マイグレーション
+- どうしようか迷ったが、踏み台サーバにdocker, docker-composeを入れてマイグレーションすることにした
+  - [参考](https://qiita.com/TakumaKurosawa/items/e67315583009257cd1ea)
+- docker-compose.yml
+  - dbとvolumeは消さないといけない
+- setting.py
+  - 接続先情報を本番用に書き直さないといけない（環境変数で注入できなかった・・・）
+
+- ■docker-compose.yml
+```
+
+version: '3'
+services:
+  web:
+    container_name: lottery_api
+    build: .
+    command: ["./wait-for-it.sh", "{RDSエンドポイント}", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    tty: true
+    stdin_open: true
+
+```
+- ■setting.py
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': '{本番用データベース名}',
+        'USER': '{本番用ユーザ}',
+        'PASSWORD': '{本番用DBパスワード}',
+        'HOST': '{本番用エンドポイント}',
+        'PORT': 5432
+    }
+}
+```
+- `docker-compose_production.yml`としてローカルに配置している
+- `lottery_backend/setting_production.py`としてローカルに配置している
+
+# TODO 
+- settingsを分ける（caprese_api参考に）
+
+
