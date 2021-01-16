@@ -15,7 +15,3 @@
 
 # img
 /_media
-
-# deploy
-docker-compose_production.yml
-lottery_backend/setting_production.py

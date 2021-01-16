@@ -1,7 +1,6 @@
 asgiref==3.2.3
 Django==3.0.5
 djangorestframework==3.11.0
-mysqlclient==1.4.6
 pytz==2019.3
 sqlparse==0.3.0
 django-redis==4.11.0
@@ -16,4 +15,9 @@ django-extensions==2.2.9
 django-cors-headers==3.3.0
 flake8==3.8.3
 pillow==7.1.2
+django-environ==0.4.5
+django-extensions==2.2.9
+gunicorn==20.0.4
+environ
+psycopg2-binary
 psycopg2

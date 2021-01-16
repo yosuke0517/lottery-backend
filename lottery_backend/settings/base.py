@@ -23,11 +23,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'g$qvic8_s725g=95^#&&h%p9luruy@=ia4pe_710$2%zzqq%(b'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -79,21 +74,6 @@ REST_FRAMEWORK = {
 }
 
 WSGI_APPLICATION = 'lottery_backend.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lotterydb',
-        'USER': 'lottery',
-        'PASSWORD': 'lottery',
-        'HOST': 'db',
-        'PORT': 5432
-    }
-}
 
 
 # Password validation

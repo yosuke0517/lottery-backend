@@ -1,7 +1,7 @@
 # lottery-backend
 # システム要件
 ### サブスクリプション宝くじ当選番号検索アプリ
-- 会員登録することで1ヶ月間フリー検索が可能。（自動課金制）
+- ~~会員登録することで1ヶ月間フリー検索が可能。（自動課金制）~~
 
 # テーブル設計
 - [テーブル設計](https://docs.google.com/spreadsheets/d/1qf94PoMqfEpVkMwJFre9tEFsBqO0vTpGz5La-3Ukxks/edit#gid=0)
@@ -147,6 +147,23 @@ DATABASES = {
 ```
 - `docker-compose_production.yml`としてローカルに配置している
 - `lottery_backend/setting_production.py`としてローカルに配置している
+
+# ec2のユーザデータで初期化
+```
+#!/bin/bash
+
+# ホスト名
+sed -i 's/^HOSTNAME=[a-zA-Z0-9\.\-]*$/HOSTNAME={ホスト名}/g' /etc/sysconfig/network
+hostname '{ホスト名}'
+
+# タイムゾーン
+cp /usr/share/zoneinfo/Japan /etc/localtime
+sed -i 's|^ZONE=[a-zA-Z0-9\.\-\"]*$|ZONE="Asia/Tokyo”|g' /etc/sysconfig/clock
+
+# 言語設定
+echo "LANG=ja_JP.UTF-8" > /etc/sysconfig/i18n
+
+```
 
 # TODO 
 - settingsを分ける（caprese_api参考に）
