@@ -165,7 +165,13 @@ echo "LANG=ja_JP.UTF-8" > /etc/sysconfig/i18n
 
 ```
 
-# TODO 
-- settingsを分ける（caprese_api参考に）
+# 設定ファイルを分ける
+- settingsフォルダを作成し既存のsettings.pyをbase.pyへリネーム
+- __init__.pyを作成（pyCharmなら自動作成される）
+- local.py,production.pyを作成（分けたい項目をbase.pyから削除してそれぞれに書く）
+  - 共通で使用するものはそのままbase.py
 
-
+### runserverやmigrate時の設定ファイルの渡し方
+  - `python3 manage.py migrate --settings lottery_backend.settings.production`
+    - 上記のように`--settings`オプションを渡して各環境の場所を指定する
+    - 上記ではlottery_backend/settings/production.pyの設定ファイルを読み込んでいる（base.pyは指定しなくて良い）

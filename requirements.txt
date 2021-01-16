@@ -20,4 +20,3 @@ django-extensions==2.2.9
 gunicorn==20.0.4
 environ
 psycopg2-binary
-psycopg2
