@@ -175,3 +175,120 @@ echo "LANG=ja_JP.UTF-8" > /etc/sysconfig/i18n
   - `python3 manage.py migrate --settings lottery_backend.settings.production`
     - 上記のように`--settings`オプションを渡して各環境の場所を指定する
     - 上記ではlottery_backend/settings/production.pyの設定ファイルを読み込んでいる（base.pyは指定しなくて良い）
+
+### Wsgiサーバーとしてgunicornを導入する
+- pipenv install gunicorn
+- 設定ファイル（wsgi.pyの設定ファイル参照を以下のように編集）
+
+```
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lottery_backend.settings.production')
+```
+
+### nginxとgunicornを接続
+- /etc/nginx/nginx.conf
+```
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /var/run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    index   index.html index.htm;
+
+    upstream app_server {
+       server 127.0.0.1:8000 fail_timeout=0;
+    }
+
+    server {
+
+        ## ここを書き換える
+        listen    80;
+        server_name     (EC2のドメイン or IPアドレス);
+        client_max_body_size    6G;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+            # 以下4行を追加
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_redirect off;
+            proxy_pass   http://app_server;
+        }
+
+        location /static {
+            alias (アプリケーションのstaticファイルの絶対パスを記入);
+            expires 5h;
+        }
+
+        # redirect server error pages to the static page /40x.html
+        #
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }
+
+}
+
+
+```
+
+- nginx再起動
+  - `sudo service nginx restart`
+  
+- これでClient -> Server80番ポート(Nginx) -> Server8000番ポート(gunicorn) -> Djangoアプリケーション
+の流れを作ることができる
+
+### gunicorn起動
+- `gunicorn lottery_backend.wsgi --bind=0.0.0.0:8000`

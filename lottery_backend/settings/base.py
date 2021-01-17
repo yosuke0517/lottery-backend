@@ -124,3 +124,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers + (
     'access-control-allow-origin',
 )
+
+CORS_ORIGIN_WHITELIST = [
+    'https://2021lottery.tk'
+]
