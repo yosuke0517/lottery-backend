@@ -16,13 +16,11 @@ from corsheaders.defaults import default_headers
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'g$qvic8_s725g=95^#&&h%p9luruy@=ia4pe_710$2%zzqq%(b'
-
 
 # Application definition
 
@@ -75,7 +73,6 @@ REST_FRAMEWORK = {
 
 WSGI_APPLICATION = 'lottery_backend.wsgi.application'
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -94,7 +91,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -110,7 +106,6 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'lottery_api.User'  # 今回認証に使うモデル
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -123,6 +118,13 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_HEADERS = default_headers + (
     'access-control-allow-origin',
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken',
+    'accept-encoding'
 )
 
 CORS_ORIGIN_WHITELIST = [
@@ -130,3 +132,12 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = (
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+)
