@@ -292,3 +292,12 @@ http {
 
 ### gunicorn起動
 - `gunicorn lottery_backend.wsgi --bind=0.0.0.0:8000`
+
+### https化手順
+- ドメインの取得（freenom + Route53とか）
+- ホストゾーンの作成
+  - 取得したドメインを登録する
+- レコードの作成（Aレコード）
+  - シンプルルーティングで値にはec2等のIPアドレスを設定する
+- NSレコード（4つ）をDNSと紐付ける（freenomとか）
+
