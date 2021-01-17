@@ -128,7 +128,8 @@ CORS_ALLOW_HEADERS = default_headers + (
 )
 
 CORS_ORIGIN_WHITELIST = [
-    'https://2021lottery.tk'
+    'https://2021lottery.tk',
+    '18.177.145.215'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
