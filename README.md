@@ -291,7 +291,7 @@ http {
 の流れを作ることができる
 
 ### gunicorn起動
-- `gunicorn lottery_backend.wsgi --bind=0.0.0.0:8000`
+- `gunicorn lottery_backend.wsgi --bind=0.0.0.0:8000 -D`
 
 ### https化手順
 - ドメインの取得（freenom + Route53とか）
