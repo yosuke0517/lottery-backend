@@ -26,6 +26,11 @@ DATABASES = {
     }
 }
 
+CORS_ORIGIN_WHITELIST = [
+    'https://2021lottery.tk',
+    '18.177.145.215'
+]
+
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.getenv('STATIC_ROOT', os.path.join(BASE_DIR, 'static'))
