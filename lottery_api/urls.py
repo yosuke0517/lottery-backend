@@ -18,5 +18,6 @@ urlpatterns = [
     path('lotoseven/', views.LotoSevenListView.as_view(), name='lotoseven'),
     path('create/', views.CreateUserView.as_view(), name='create'),
     path('myprofile/', views.MyProfileListView.as_view(), name='myprofile'),
+    path('testlogin/', views.test_auth_token), # 簡単ログイン
     path('', include(router.urls))
 ]
