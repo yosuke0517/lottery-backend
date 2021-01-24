@@ -1,11 +1,22 @@
+import environ
 from rest_framework import authentication, permissions, generics, filters
+
 from lottery_api import serializers, custompermissions
 from lottery_api.models import Message, Profile, MiniLoto, LotoSix, LotoSeven
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework import parsers, renderers
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.compat import coreapi, coreschema
 from rest_framework.response import Response
+from rest_framework.schemas import ManualSchema
 from lottery_api.filters import LotoSevenFilter, LotoSixFilter, MiniLotoFilter
+from rest_framework.views import APIView
+
+env = environ.Env()
+env.read_env('.env')
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -112,3 +123,51 @@ class LotoSevenListView(generics.ListAPIView):
 
     def get_queryset(self):
         return self.queryset.order_by('times').reverse()
+
+
+# 簡単ログイン用
+class TestLoginView(APIView):
+    throttle_classes = ()
+    permission_classes = ()
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = AuthTokenSerializer
+    if coreapi is not None and coreschema is not None:
+        schema = ManualSchema(
+            fields=[
+                coreapi.Field(
+                    name="username",
+                    required=True,
+                    location='form',
+                    schema=coreschema.String(
+                        title="Username",
+                        description="Valid username for authentication",
+                    ),
+                ),
+                coreapi.Field(
+                    name="password",
+                    required=True,
+                    location='form',
+                    schema=coreschema.String(
+                        title="Password",
+                        description="Valid password for authentication",
+                    ),
+                ),
+            ],
+            encoding="application/json",
+        )
+
+    def post(self, request, *args, **kwargs):
+        data = {
+            "username": env('TEST_USER_EMAIL'),
+            "password": env('TEST_USER_PASS')
+        }
+        serializer = self.serializer_class(data=data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+
+
+test_auth_token = TestLoginView.as_view()
