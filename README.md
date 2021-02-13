@@ -292,6 +292,7 @@ http {
 
 ### gunicorn起動
 - `gunicorn lottery_backend.wsgi --bind=0.0.0.0:8000 -D`
+- 止めたい時は｀sudo lsof -i:8000｀でPID探してkillする
 
 ### https化手順
 - ドメインの取得（freenom + Route53とか）
